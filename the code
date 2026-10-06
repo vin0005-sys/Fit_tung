@@ -1,1 +1,1382 @@
+/* outfit-homepage */
 
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px 0px 100px;
+isolation: isolate;
+
+position: relative;
+width: 440px;
+height: 956px;
+
+background: #FFFFFF;
+
+
+/* status-bar */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+padding: 0px 24px;
+
+width: 440px;
+height: 44px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 0;
+z-index: 0;
+
+
+/* 9:40 */
+
+width: 32px;
+height: 18px;
+
+font-family: 'Geist';
+font-style: normal;
+font-weight: 600;
+font-size: 14px;
+line-height: 18px;
+
+color: #18181B;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 6px;
+
+width: 80px;
+height: 20px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* ios-signal */
+
+width: 20px;
+height: 20px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Vector */
+
+position: absolute;
+left: 0%;
+right: 4%;
+top: 21.93%;
+bottom: 16.93%;
+
+background: #18181B;
+
+
+/* ios-wifi-signal */
+
+width: 20px;
+height: 20px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Vector */
+
+position: absolute;
+left: 5%;
+right: 9.29%;
+top: 16.68%;
+bottom: 21.68%;
+
+background: #18181B;
+
+
+/* ios-battery-full */
+
+width: 28px;
+height: 20px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* Vector */
+
+position: absolute;
+left: 0%;
+right: 2.4%;
+top: 20%;
+bottom: 15%;
+
+background: #18181B;
+
+
+/* header-section */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 16px 24px;
+gap: 4px;
+
+width: 440px;
+height: 87px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 0;
+z-index: 1;
+
+
+/* Friday, September 4, 2026 */
+
+width: 392px;
+height: 16px;
+
+font-family: 'Geist';
+font-style: normal;
+font-weight: 700;
+font-size: 12px;
+line-height: 16px;
+/* identical to box height */
+text-transform: uppercase;
+
+color: #71717A;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Today's Recommended Outfit */
+
+width: 392px;
+height: 35px;
+
+font-family: 'Instrument Serif';
+font-style: normal;
+font-weight: 400;
+font-size: 32px;
+line-height: 110%;
+/* or 35px */
+
+color: #18181B;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* outfit-grid */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px 24px 32px;
+
+width: 440px;
+height: 560px;
+min-height: 520px;
+
+background: rgba(246, 246, 246, 0.25);
+border-radius: 16px;
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+z-index: 2;
+
+
+/* outfit-canvas */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+
+width: 392px;
+height: 545px;
+
+background: rgba(246, 246, 246, 0.1);
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* grid-row-1 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px;
+gap: 12px;
+
+width: 392px;
+height: 272px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* product-card-Top */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+align-items: flex-start;
+padding: 12px;
+
+width: 190px;
+height: 260px;
+
+background: rgba(246, 246, 246, 0.1);
+border-radius: 16px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 1;
+
+
+/* product-image */
+
+width: 166px;
+height: 145px;
+
+background: url(computering jacket.png);
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Frame */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+gap: 2px;
+
+width: 166px;
+height: 32px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Jacket */
+
+width: 166px;
+height: 13px;
+
+font-family: 'Geist';
+font-style: normal;
+font-weight: 500;
+font-size: 10px;
+line-height: 13px;
+/* identical to box height */
+text-transform: uppercase;
+
+color: #71717A;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Windbreaker */
+
+width: 166px;
+height: 17px;
+
+font-family: 'Geist';
+font-style: normal;
+font-weight: 700;
+font-size: 13px;
+line-height: 17px;
+/* identical to box height */
+
+color: #18181B;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* product-card-Accessory */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+align-items: flex-start;
+padding: 12px;
+
+width: 190px;
+height: 260px;
+
+background: rgba(246, 246, 246, 0.1);
+border-radius: 16px;
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 1;
+
+
+/* product-image */
+
+width: 166px;
+height: 204px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 1;
+
+
+/* Frame */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+gap: 2px;
+
+width: 166px;
+height: 32px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Accessory */
+
+width: 166px;
+height: 13px;
+
+font-family: 'Geist';
+font-style: normal;
+font-weight: 500;
+font-size: 10px;
+line-height: 13px;
+/* identical to box height */
+text-transform: uppercase;
+
+color: #71717A;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Placeholder */
+
+width: 166px;
+height: 17px;
+
+font-family: 'Geist';
+font-style: normal;
+font-weight: 600;
+font-size: 13px;
+line-height: 17px;
+/* identical to box height */
+
+color: #18181B;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* grid-row-2 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px;
+gap: 12px;
+
+width: 392px;
+height: 260px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* product-card-Bottoms */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+align-items: flex-start;
+padding: 12px;
+
+width: 190px;
+height: 260px;
+
+background: rgba(246, 246, 246, 0.1);
+border-radius: 16px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 1;
+
+
+/* product-image */
+
+width: 166px;
+height: 204px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 1;
+
+
+/* Frame */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+gap: 2px;
+
+width: 166px;
+height: 32px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Bottoms */
+
+width: 166px;
+height: 13px;
+
+font-family: 'Geist';
+font-style: normal;
+font-weight: 500;
+font-size: 10px;
+line-height: 13px;
+/* identical to box height */
+text-transform: uppercase;
+
+color: #71717A;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Placeholder */
+
+width: 166px;
+height: 17px;
+
+font-family: 'Geist';
+font-style: normal;
+font-weight: 600;
+font-size: 13px;
+line-height: 17px;
+/* identical to box height */
+
+color: #18181B;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* product-card-Shoes */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+align-items: flex-start;
+padding: 12px;
+
+width: 190px;
+height: 260px;
+
+background: rgba(246, 246, 246, 0.1);
+border-radius: 16px;
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 1;
+
+
+/* product-image */
+
+width: 166px;
+height: 204px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 1;
+
+
+/* Frame */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+gap: 2px;
+
+width: 166px;
+height: 32px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Shoes */
+
+width: 166px;
+height: 13px;
+
+font-family: 'Geist';
+font-style: normal;
+font-weight: 500;
+font-size: 10px;
+line-height: 13px;
+/* identical to box height */
+text-transform: uppercase;
+
+color: #71717A;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Placeholder */
+
+width: 166px;
+height: 17px;
+
+font-family: 'Geist';
+font-style: normal;
+font-weight: 600;
+font-size: 13px;
+line-height: 17px;
+/* identical to box height */
+
+color: #18181B;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* explanations-panel */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px 24px 16px;
+
+width: 440px;
+height: 202px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 3;
+align-self: stretch;
+flex-grow: 0;
+z-index: 3;
+
+
+/* Why this works */
+
+width: 392px;
+height: 26px;
+
+font-family: 'Instrument Serif';
+font-style: normal;
+font-weight: 400;
+font-size: 20px;
+line-height: 26px;
+/* identical to box height */
+
+color: #18181B;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Line */
+
+box-sizing: border-box;
+
+width: 392px;
+height: 0px;
+
+border: 1px solid #F4F4F5;
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* reason-cloud-sun */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 12px 0px;
+gap: 16px;
+
+width: 392px;
+height: 80px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Frame */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 0px;
+
+width: 36px;
+height: 36px;
+
+background: #F6F6F6;
+border-radius: 18px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* cloud-sun */
+
+width: 18px;
+height: 18px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Vector */
+
+position: absolute;
+left: 8.34%;
+right: 8.33%;
+top: 8.33%;
+bottom: 8.33%;
+
+border: 2px solid #18181B;
+
+
+/* Frame */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+gap: 2px;
+
+width: 340px;
+height: 56px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 1;
+
+
+/* Weather */
+
+width: 340px;
+height: 14px;
+
+font-family: 'Geist';
+font-style: normal;
+font-weight: 500;
+font-size: 11px;
+line-height: 14px;
+text-transform: uppercase;
+
+color: #71717A;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Partly cloudy, 18°C - perfect for breathable lightweight layers */
+
+width: 340px;
+height: 40px;
+
+font-family: 'Geist';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 140%;
+/* or 20px */
+
+color: #18181B;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Line */
+
+box-sizing: border-box;
+
+width: 392px;
+height: 0px;
+
+border: 1px solid #F4F4F5;
+
+/* Inside auto layout */
+flex: none;
+order: 3;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* reason-calendar */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 12px 0px;
+gap: 16px;
+
+width: 392px;
+height: 80px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 4;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Frame */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 0px;
+
+width: 36px;
+height: 36px;
+
+background: #F6F6F6;
+border-radius: 18px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* calendar */
+
+width: 18px;
+height: 18px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Vector */
+
+position: absolute;
+left: 12.5%;
+right: 12.5%;
+top: 8.33%;
+bottom: 8.33%;
+
+border: 2px solid #18181B;
+
+
+/* Frame */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+gap: 2px;
+
+width: 340px;
+height: 56px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 1;
+
+
+/* Schedule */
+
+width: 340px;
+height: 14px;
+
+font-family: 'Geist';
+font-style: normal;
+font-weight: 500;
+font-size: 11px;
+line-height: 14px;
+text-transform: uppercase;
+
+color: #71717A;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Coffee meeting with Jehan at 10:00 AM - elegant smart casual posture */
+
+width: 340px;
+height: 40px;
+
+font-family: 'Geist';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 140%;
+/* or 20px */
+
+color: #18181B;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Line */
+
+box-sizing: border-box;
+
+width: 392px;
+height: 0px;
+
+border: 1px solid #F4F4F5;
+
+/* Inside auto layout */
+flex: none;
+order: 5;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* bottom-navigation */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+padding: 12px 24px 20px;
+
+position: absolute;
+height: 80px;
+left: 0px;
+right: 0px;
+bottom: 0px;
+
+background: rgba(255, 255, 255, 0.25);
+
+/* Inside auto layout */
+flex: none;
+order: 4;
+flex-grow: 0;
+z-index: 4;
+
+
+/* nav-Home */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+padding: 0px;
+gap: 4px;
+
+width: 81px;
+height: 49px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 1;
+
+
+/* home */
+
+width: 24px;
+height: 24px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Vector */
+
+position: absolute;
+left: 12.5%;
+right: 12.5%;
+top: 8.33%;
+bottom: 12.5%;
+
+border: 2px solid #18181B;
+
+
+/* Home */
+
+width: 30px;
+height: 13px;
+
+font-family: 'Geist';
+font-style: normal;
+font-weight: 600;
+font-size: 10px;
+line-height: 13px;
+/* identical to box height */
+text-transform: uppercase;
+
+color: #18181B;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Ellipse */
+
+width: 4px;
+height: 4px;
+
+background: #18181B;
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* nav-Wardrobe */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+padding: 0px;
+gap: 4px;
+
+width: 81px;
+height: 41px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 1;
+
+
+/* circle-x */
+
+width: 24px;
+height: 24px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Vector */
+
+position: absolute;
+left: 8.33%;
+right: 8.33%;
+top: 8.33%;
+bottom: 8.33%;
+
+border: 2px solid #71717A;
+
+
+/* Wardrobe */
+
+width: 56px;
+height: 13px;
+
+font-family: 'Geist';
+font-style: normal;
+font-weight: 500;
+font-size: 10px;
+line-height: 13px;
+/* identical to box height */
+text-transform: uppercase;
+
+color: #71717A;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* add-item-button */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 0px;
+
+width: 51px;
+height: 52px;
+
+background: rgba(246, 246, 246, 0.25);
+border-radius: 26px;
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* plus */
+
+width: 35px;
+height: 36px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Vector */
+
+position: absolute;
+left: 20.83%;
+right: 20.83%;
+top: 20.83%;
+bottom: 20.83%;
+
+border: 2px solid #18181B;
+
+
+/* Group 1 */
+
+width: 98px;
+height: 41px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 3;
+flex-grow: 0;
+
+
+/* Sliders
+
+Keywords: settings, controls
+*/
+
+position: absolute;
+width: 25.57px;
+height: 23.71px;
+left: 273.22px;
+top: 15.5px;
+
+
+
+/* Icon */
+
+position: absolute;
+left: 4.17%;
+right: 4.17%;
+top: 12.5%;
+bottom: 12.5%;
+
+border: 2.5px solid #757575;
+
+
+/* nav-Preferences */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+padding: 0px;
+gap: 4px;
+
+position: absolute;
+width: 98px;
+height: 12.84px;
+left: 237px;
+top: 43.66px;
+
+
+
+/* Preferences */
+
+width: 71px;
+height: 13px;
+
+font-family: 'Geist';
+font-style: normal;
+font-weight: 500;
+font-size: 10px;
+line-height: 13px;
+/* identical to box height */
+text-transform: uppercase;
+
+color: #71717A;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* nav-Profile */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+padding: 0px;
+gap: 4px;
+
+width: 81px;
+height: 41px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 4;
+flex-grow: 1;
+
+
+/* user */
+
+width: 24px;
+height: 24px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Vector */
+
+position: absolute;
+left: 20.83%;
+right: 20.83%;
+top: 12.5%;
+bottom: 12.5%;
+
+border: 2px solid #71717A;
+
+
+/* Profile */
+
+width: 41px;
+height: 13px;
+
+font-family: 'Geist';
+font-style: normal;
+font-weight: 500;
+font-size: 10px;
+line-height: 13px;
+/* identical to box height */
+text-transform: uppercase;
+
+color: #71717A;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
