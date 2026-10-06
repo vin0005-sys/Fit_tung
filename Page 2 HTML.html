@@ -1,0 +1,33 @@
+import frame from "./frame.svg";
+import { PreferencesBottomNavigationSection } from "./PreferencesBottomNavigationSection";
+import { PreferencesHeaderSection } from "./PreferencesHeaderSection";
+import { PreferencesSettingsSection } from "./PreferencesSettingsSection";
+
+export const OutfitPreferences = (): JSX.Element => {
+  return (
+    <div className="flex min-h-screen flex-col items-start bg-[linear-gradient(0deg,rgba(255,255,255,1)_0%,rgba(255,255,255,1)_100%)] px-0 pb-[100px] pt-0">
+      <header
+        aria-label="Status bar"
+        className="relative flex h-11 w-full shrink-0 items-center justify-between px-6 py-0"
+      >
+        <time
+          dateTime="09:41"
+          className="relative w-fit [font-family:'Geist-SemiBold',Helvetica] text-sm font-semibold leading-[normal] tracking-[0] text-zinc-900"
+        >
+          9:41
+        </time>
+        <img
+          className="relative flex-[0_0_auto]"
+          src={frame}
+          alt=""
+          aria-hidden="true"
+        />
+      </header>
+      <main className="flex w-full flex-1 flex-col items-start">
+        <PreferencesHeaderSection />
+        <PreferencesSettingsSection />
+      </main>
+      <PreferencesBottomNavigationSection />
+    </div>
+  );
+};
