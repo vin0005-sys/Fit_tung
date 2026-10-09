@@ -1,0 +1,266 @@
+/* iPhone 16 & 17 Pro Max - 4 */
+
+position: relative;
+width: 440px;
+height: 956px;
+
+background: #FFFFFF;
+
+
+/* status-bar */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+padding: 0px 24px;
+
+position: absolute;
+width: 440px;
+height: 44px;
+left: -4px;
+top: 0px;
+
+
+
+/* 9:42 */
+
+width: 31px;
+height: 18px;
+
+font-family: 'Geist';
+font-style: normal;
+font-weight: 600;
+font-size: 14px;
+line-height: 18px;
+
+color: #18181B;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 6px;
+
+width: 80px;
+height: 20px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* ios-signal */
+
+width: 20px;
+height: 20px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Vector */
+
+position: absolute;
+left: 20%;
+right: -1.12%;
+top: 35%;
+bottom: 16.09%;
+
+background: #18181B;
+
+
+/* ios-wifi-signal */
+
+width: 20px;
+height: 20px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Vector */
+
+position: absolute;
+left: 5%;
+right: 9.29%;
+top: 16.68%;
+bottom: 21.68%;
+
+background: #18181B;
+
+
+/* ios-battery-full */
+
+width: 28px;
+height: 20px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* Vector */
+
+position: absolute;
+left: 0%;
+right: 2.4%;
+top: 20%;
+bottom: 15%;
+
+background: #18181B;
+
+
+/* photo */
+
+position: absolute;
+width: 56px;
+height: 56px;
+left: 39px;
+top: 867px;
+
+
+
+/* icon */
+
+position: absolute;
+left: 12.5%;
+right: 12.5%;
+top: 12.5%;
+bottom: 12.5%;
+
+background: #717179;
+
+
+/* calendar-add-btn */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 8px 21px 8px 14px;
+gap: 5px;
+
+position: absolute;
+width: 125px;
+height: 44px;
+left: 276px;
+top: 873px;
+
+background: #18181B;
+border-radius: 14px;
+
+
+/* Plus circle
+
+Keywords: add, new
+*/
+
+width: 14px;
+height: 14px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Icon */
+
+position: absolute;
+left: 8.33%;
+right: 8.33%;
+top: 8.33%;
+bottom: 8.33%;
+
+border: 2px solid #FFFFFF;
+
+
+/* Describe Item */
+
+width: 80px;
+height: 16px;
+
+font-family: 'Geist';
+font-style: normal;
+font-weight: 600;
+font-size: 12px;
+line-height: 16px;
+/* identical to box height */
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Rectangle 1 */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 362px;
+height: 732px;
+left: 39px;
+top: 112px;
+
+background: #8E8E93;
+border: 1px solid #BFBFBF;
+border-radius: 16px;
+
+
+/* Camera */
+
+position: absolute;
+width: 68px;
+height: 68px;
+left: 186px;
+top: 444px;
+
+
+
+/* Icon */
+
+position: absolute;
+left: 4.17%;
+right: 4.17%;
+top: 12.5%;
+bottom: 12.5%;
+
+border: 1.6px solid #1E1E1E;
+
+
+/* Ellipse 1 */
+
+position: absolute;
+width: 54px;
+height: 54px;
+left: 193px;
+top: 871px;
+
+background: #D9D9D9;
