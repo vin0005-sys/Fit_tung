@@ -23,3 +23,39 @@ body{min-height:100dvh;align-items:flex-start}
 .photo-box{height:clamp(310px,65dvh,650px);min-height:0;max-height:none}
 @media(min-width:600px){.phone{height:956px;max-height:956px;min-height:0}}
 @media(max-width:380px){.screen-content{padding-left:16px;padding-right:16px}}
+
+/* Version 3: unify frame measurements across ALL routes.
+   #app was a shrink-to-fit flex child; its intrinsic width could vary by page. */
+html { height:100%; }
+body { width:100%; min-width:0; }
+#app { width:100%; max-width:100%; min-width:0; display:flex; justify-content:center; align-items:flex-start; }
+.phone { flex:0 0 auto; width:min(440px,100%); min-width:0; height:100dvh; max-height:100dvh; min-height:0; overflow:hidden; }
+.screen-content { box-sizing:border-box; flex:1 1 auto; width:100%; height:100%; min-width:0; min-height:0; overflow-x:hidden; overflow-y:auto; scrollbar-gutter:stable; -webkit-overflow-scrolling:touch; }
+.screen-content > * { max-width:100%; }
+.screen-content .fill { height:100%; min-height:0; }
+.detail-photo { height:min(390px,43dvh); min-height:0; max-height:none; }
+.detail-photo img { object-fit:contain; }
+.stats > div { min-width:0; overflow-wrap:anywhere; }
+.stats .stat-value { line-height:1.16; }
+.detail-actions { margin-bottom:16px; }
+.ui-icon { display:block; flex:none; }
+.status-icons { display:flex; align-items:center; gap:3px; color:#171719; }
+.nav button { position:relative; line-height:1.2; gap:4px; }
+.nav .nav-icon { height:27px; line-height:1; display:grid; place-items:center; }
+.nav .plus-circle { font-size:inherit; line-height:1; }
+.nav button.active::after { bottom:-9px; left:50%; transform:translateX(-50%); }
+.reason-icon { font-size:inherit; }
+.back { display:grid; place-items:center; width:38px; height:38px; font-size:inherit; flex:none; }
+.mini-button { display:inline-flex; gap:4px; justify-content:center; align-items:center; }
+.camera-actions label { display:grid; place-items:center; }
+.camera-actions .main-btn { display:inline-flex; align-items:center; gap:5px; }
+.accordion summary::before { content:''; display:inline-block; width:9px; height:9px; margin-right:11px; border-right:1.8px solid currentColor; border-bottom:1.8px solid currentColor; transform:translateY(-2px) rotate(45deg); }
+.accordion[open] summary::before { transform:translateY(2px) rotate(225deg); }
+@media(min-width:600px) {
+  #app { width:100%; }
+  .phone { width:440px; height:956px; max-height:956px; min-height:0; }
+}
+@media(max-width:599px) {
+  body { padding:0; }
+  .phone { width:100%; height:100dvh; max-height:100dvh; border-radius:0; }
+}
