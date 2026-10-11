@@ -1,13 +1,102 @@
-const app=document.getElementById('app');
-const jacket='assets/windbreaker.png';
-const initial=[{id:1,category:'Jacket',name:'Windbreaker',brand:'Nike',colour:'Navy',style:'Jacket',weight:'Lightweight',last:'September 18, 2026',image:jacket},{id:2,category:'Bottoms',name:'Placeholder',colour:'All'},{id:3,category:'Shoes',name:'Placeholder',colour:'All'},{id:4,category:'Accessory',name:'Placeholder',colour:'All'},{id:5,category:'Top',name:'Placeholder',colour:'All'},{id:6,category:'Bottoms',name:'Placeholder',colour:'All'}];
-const stored=(key,fallback)=>{try{return JSON.parse(localStorage.getItem(key))??fallback}catch{return fallback}};
-let items=stored('fit_items',initial),settings=stored('fit_settings',{formal:true,heat:true,notes:'Strictly neutral tones only (olive, slate, navy, sand). Avoid oversized cuts and synthetics. Favor minimalist linen and heavy structured cotton.'});
-let screen=location.hash.slice(1)||'home',selected=1,newDesc='',uploadedImage='',editingId=null,toastTimer;
-const save=()=>{localStorage.setItem('fit_items',JSON.stringify(items));localStorage.setItem('fit_settings',JSON.stringify(settings))};
-const escapeHTML=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-// Local SVG icons (Lucide-style outlines) replace font glyphs that varied by device.
-const iconPaths = {
+/*
+  FIT_TUNG — OUTFIT PLANNER
+  This is a front-end school project, using plain JavaScript.
+
+  This file: starter data, app state, common UI parts and icons.
+  screens.js: the HTML for each screen.
+  actions.js: buttons, navigation and saving items.
+  database.js: optional SQL login and database requests.
+
+  Without Supabase, this app saves data in the current browser.
+  If Supabase is configured, signed-in users save to the SQL database.
+  The optional database code is kept separately in database.js.
+*/
+
+// ============================================================
+// 1. DATA AND SETTINGS
+// ============================================================
+
+const app = document.getElementById('app');
+const jacketImage = 'assets/windbreaker.png';
+
+const starterClothes = [
+  { id: 1, category: 'Jacket', name: 'Windbreaker', brand: 'Nike', colour: 'Navy',
+    style: 'Jacket', weight: 'Lightweight', zip: true, size: '',
+    last: 'September 18, 2026', image: jacketImage },
+  { id: 2, category: 'Bottoms', name: 'Placeholder', colour: 'All' },
+  { id: 3, category: 'Shoes', name: 'Placeholder', colour: 'All' },
+  { id: 4, category: 'Accessory', name: 'Placeholder', colour: 'All' },
+  { id: 5, category: 'Top', name: 'Placeholder', colour: 'All' },
+  { id: 6, category: 'Bottoms', name: 'Placeholder', colour: 'All' }
+];
+
+const starterSettings = {
+  formal: true,
+  heat: true,
+  notes: 'Strictly neutral tones only (olive, slate, navy, sand). Avoid oversized cuts and synthetics. Favor minimalist linen and heavy structured cotton.'
+};
+
+// Read saved data. Use starter data if this browser has no saved items.
+function loadData(key, defaultValue) {
+  try {
+    const saved = localStorage.getItem(key);
+    return saved === null ? defaultValue : JSON.parse(saved);
+  } catch (error) {
+    return defaultValue;
+  }
+}
+
+let clothes = loadData('fit_items', starterClothes);
+let settings = loadData('fit_settings', starterSettings);
+
+// Variables that describe what the user is currently doing.
+let page = location.hash.slice(1) || 'home';
+let selectedId = 1;
+let editingId = null;             // null means we're ADDING, not editing
+let itemDescription = '';
+let itemImage = '';
+let toastTimer;
+let cloudUser = null;             // null means local browser mode
+let preferencesTimer;
+
+// Save local data only when signed out. Cloud data never mixes with it.
+function saveData() {
+  if (cloudUser) return;
+  localStorage.setItem('fit_items', JSON.stringify(clothes));
+  localStorage.setItem('fit_settings', JSON.stringify(settings));
+}
+
+// Save preferences locally, or to SQL if the user is signed in.
+async function savePreferences() {
+  if (!cloudUser) {
+    saveData();
+    return;
+  }
+  try {
+    await FitDatabase.saveSettings(settings, cloudUser.id);
+  } catch (error) {
+    notice('Could not save preferences: ' + error.message);
+  }
+}
+
+function selectedClothing() {
+  return clothes.find(item => item.id === selectedId);
+}
+
+// Makes text safe to insert into our HTML templates.
+function safe(text) {
+  return String(text ?? '').replace(/[&<>"']/g, character => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;',
+    '"': '&quot;', "'": '&#39;'
+  }[character]));
+}
+
+// ============================================================
+// 2. REUSABLE PAGE PARTS
+// ============================================================
+
+// SVG icons. Unlike emoji/text symbols, they look the same on every device.
+const iconDrawings = {
   home: '<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>',
   wardrobe: '<circle cx="12" cy="12" r="9"/><path d="m9 9 6 6m0-6-6 6"/>',
   plus: '<path d="M12 4v16M4 12h16"/>',
@@ -19,41 +108,99 @@ const iconPaths = {
   circleplus: '<circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/>',
   back: '<circle cx="12" cy="12" r="9"/><path d="m12 8-4 4 4 4m-4-4h9"/>',
   camera: '<path d="M14 4h-4L8 7H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="14" r="4"/>',
-  image: '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/>',
+  image: '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/>'
 };
-function uiIcon(name,size=24){return `<svg class="ui-icon" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${iconPaths[name]||''}</svg>`}
-const nav = active => `<nav class="nav" aria-label="Main navigation">${[
-  ['home','home','HOME'],['wardrobe','wardrobe','WARDROBE'],['camera','plus',''],
-  ['preferences','sliders','PREFERENCES'],['profile','user','PROFILE']
-].map(([route,icon,label])=>`<button onclick="${route==='camera'?'startAddItem()':`go('${route}')`}" class="${route===active?'active':''}" aria-label="${route==='camera'?'Add clothing item':route}" ${route===active?'aria-current="page"':''}><span class="${route==='camera'?'plus-circle':'nav-icon'}">${uiIcon(icon,route==='camera'?30:24)}</span>${label}</button>`).join('')}</nav>`;
-const status=()=>`<div class="status"><span>9:41</span><span class="status-icons" aria-label="Signal, Wi-Fi and battery"><svg width="23" height="16" viewBox="0 0 23 16" aria-hidden="true"><rect x="1" y="11" width="4" height="4" rx=".7"/><rect x="7" y="8" width="4" height="7" rx=".7"/><rect x="13" y="4" width="4" height="11" rx=".7"/><rect x="19" y="1" width="4" height="14" rx=".7"/></svg><svg width="19" height="16" viewBox="0 0 20 17" aria-hidden="true"><path d="M2 6c4.5-4.3 11.5-4.3 16 0M5 9c2.9-2.8 7.1-2.8 10 0M8 12c1.1-1 2.9-1 4 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="10" cy="15" r="1.2"/></svg><svg width="29" height="16" viewBox="0 0 30 16" aria-hidden="true"><rect x="1" y="2" width="24" height="12" rx="3" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="3.5" y="4.5" width="19" height="7" rx="1"/><path d="M26.5 6v4a2 2 0 0 0 0-4"/></svg></span></div>`;
-const layout=(html,navigation='',cls='')=>`<main class="phone ${cls}">${status()}<div class="screen-content ${navigation?'with-nav':''}">${html}</div>${navigation?nav(navigation):''}</main>`;
-const card=(it,canDelete=false)=>`<div class="item-card-wrap"><button class="item-card" onclick="${it.id==null?'startAddItem()':`selectItem(${Number(it.id)})`}" aria-label="${it.id==null?'Add a '+escapeHTML(it.category):'View '+escapeHTML(it.name)}">${it.image?`<img src="${escapeHTML(it.image)}" alt="${escapeHTML(it.name)}"/>`:'<div class="empty-item-photo"></div>'}<div class="item-details"><div class="item-label">${escapeHTML(it.category)}</div><div class="item-name">${escapeHTML(it.name)}</div></div></button>${canDelete && it.id != null ? `<button class="remove-card" aria-label="Remove ${escapeHTML(it.name)}" title="Remove from wardrobe" onclick="removeItem(${Number(it.id)})">×</button>` : ''}</div>`;
-const button=(title,fn='')=>`<button class="pill" ${fn?`onclick="${fn}"`:''}>${title}</button>`;
-function home(){const featured=['Jacket','Accessory','Bottoms','Shoes'].map(category=>items.find(it=>it.category===category)||{id:null,category,name:'Add an item'});return layout(`<div class="eyebrow">Friday, September 4, 2026</div><h1 class="page-title">Today's Recommended Outfit</h1><div class="outfit-grid">${featured.map(it=>card(it)).join('')}</div><h2 class="section-title">Why this works</h2><div class="reason"><span class="reason-icon">${uiIcon('cloudsun',19)}</span><div><b>Weather</b><br>Partly cloudy, 18°C – perfect for breathable lightweight layers</div></div><div class="reason"><span class="reason-icon">${uiIcon('calendar',19)}</span><div><b>Schedule</b><br>Coffee meeting at 10:00 AM – elegant smart casual posture</div></div>`, 'home')}
-function wardrobe(){return layout(`<div class="eyebrow">Your collection</div><h1 class="page-title">My Wardrobe</h1><div class="filters"><select id="category" onchange="filterItems()" aria-label="Category filter"><option value="">Category: All</option>${['Jacket','Top','Bottoms','Shoes','Accessory'].map(x=>`<option>${x}</option>`).join('')}</select><select id="color" onchange="filterItems()" aria-label="Color filter"><option value="">Color: All</option>${['Navy','Black','White','Beige','Blue'].map(x=>`<option>${x}</option>`).join('')}</select><select id="season" onchange="filterItems()" aria-label="Season filter"><option value="">Season: All</option>${['Summer','Winter','Spring','Autumn'].map(x=>`<option>${x}</option>`).join('')}</select></div><div class="wardrobe-grid" id="wardrobeItems">${items.map(it=>card(it,true)).join('')||'<p class="empty-wardrobe">No items yet. Tap + to add some clothes.</p>'}</div>`, 'wardrobe')}
-function preferences(){return layout(`<div class="eyebrow">Edit generation</div><h1 class="page-title">Preferences</h1><div class="group-label" style="margin-top:38px">Data integrations</div><div class="setting-row"><div><div class="setting-copy">Location &amp; Weather</div><div class="sub">Sync outfit suggestions with live forecasts</div></div><button class="mini-button" onclick="notice('Live weather syncing needs a weather API.')">${uiIcon('cloud',15)} Sync</button></div><div class="setting-row"><div><div class="setting-copy">Connected Calendars</div><div class="sub">Adapt posture recommendations based on schedule events</div></div><button class="mini-button dark" onclick="notice('Calendar connection requires authentication.')">${uiIcon('circleplus',15)} Add</button><button class="mini-button" onclick="notice('No calendar connected yet.')">${uiIcon('calendar',15)} Edit</button></div><div class="group-label">Recommendation model</div>${toggle('formal','Formal Outfit Weighting','Prioritise tailored suits & pleated silhouettes')}${toggle('heat','Adaptive Heat Mitigation','Avoid heavier wool fabrics above 70°F')}<div class="setting-row"><div><div class="setting-copy">Reference Outfits</div><div class="sub">Add outfits to use as references<br>for your style</div></div><button class="mini-button dark" onclick="notice('Reference outfits can be added in a future version.')">${uiIcon('circleplus',15)} Add</button><button class="mini-button" onclick="notice('No reference outfits yet.')">${uiIcon('calendar',15)} Edit</button></div><div class="group-label" style="margin-top:24px">Other style preferences</div><p class="sub">Specify favorite brands, color palettes, or fabrics to prioritize/exclude:</p><textarea id="notes" aria-label="Style preferences">${escapeHTML(settings.notes)}</textarea>`, 'preferences')}
-function toggle(key,title,desc){return `<div class="setting-row"><div><div class="setting-copy">${title}</div><div class="sub">${desc}</div></div><button class="switch ${settings[key]?'on':''}" role="switch" aria-checked="${settings[key]}" onclick="toggleSetting('${key}')"><span></span></button></div>`}
-function profile(){return layout(`<div class="eyebrow">Settings</div><h1 class="page-title">Profile</h1><div class="group-label" style="margin-top:70px">Account</div><details class="accordion"><summary>Account</summary><div>Name: ${escapeHTML(stored('fit_name','Guest'))}<p class="preview-note">This demonstration saves your settings in this browser.</p><button class="mini-button" onclick="go('signin')">Sign in</button></div></details><div class="group-label" style="margin-top:45px">Sizing</div><details class="accordion"><summary>Basic Sizing</summary><div>Size <select id="basic-size"><option>S</option><option>M</option><option>L</option><option>XL</option></select></div></details><details class="accordion"><summary>Advanced Sizing (Recommended)</summary><div>Height <input class="field" type="number" placeholder="cm" style="height:42px;font-size:14px"></div></details><div class="group-label" style="margin-top:48px">Accessibility</div><details class="accordion"><summary>Accessibility</summary><div>Use your browser's built-in zoom and accessibility settings.</div></details>`, 'profile','profile-bg')}
-function detail(){const it=items.find(x=>x.id===selected);if(!it)return layout(`<h1 class="page-title">This item was removed</h1><button class="pill" onclick="go('wardrobe')">Back to wardrobe</button>`,'wardrobe');return layout(`<div class="row"><button class="back" onclick="go('wardrobe')" aria-label="Back to wardrobe">${uiIcon('back',34)}</button><div class="center"><h1 class="page-title" style="margin:0">${escapeHTML(it.name)}</h1><div class="eyebrow">Your collection</div></div><div style="width:35px"></div></div><div class="detail-photo">${it.image?`<img src="${escapeHTML(it.image)}" alt="${escapeHTML(it.name)}">`:'<span class="serif" style="font-size:40px">No image yet</span>'}</div><div class="stats"><div><div class="stat-title">BRAND</div><div class="stat-value">${escapeHTML(it.brand||'—')}</div></div><div><div class="stat-title">WEIGHT</div><div class="stat-value">${escapeHTML(it.weight||'—')}</div></div><div><div class="stat-title">COLOUR</div><div class="stat-value">${escapeHTML(it.colour||'—')}</div></div><div><div class="stat-title">ZIP</div><div class="stat-value">${it.name==='Windbreaker'?'Yes':'—'}</div></div><div><div class="stat-title">STYLE</div><div class="stat-value">${escapeHTML(it.style||it.category)}</div></div><div><div class="stat-title">LAST WORN</div><div class="stat-value">${escapeHTML(it.last||'Not recorded')}</div></div></div><div class="detail-actions">${button('Want to make any changes?','editItem()')}<button class="remove-detail" onclick="removeItem(${Number(it.id)})">Remove from wardrobe</button></div>`, 'wardrobe')}
-function camera(){return layout(`<div class="flow-header"><button class="back" onclick="go('wardrobe')" aria-label="Back to wardrobe">${uiIcon('back',34)}</button><span class="eyebrow">Add clothing</span></div><div class="photo-box" id="cameraPreview">${uploadedImage?`<img style="max-width:100%;max-height:100%;object-fit:contain" src="${escapeHTML(uploadedImage)}" alt="Selected item">`:uiIcon('camera',54)}</div><div class="camera-actions"><label style="cursor:pointer;font-size:29px" title="Choose photo">${uiIcon('image',31)}<input type="file" accept="image/*" style="display:none" onchange="loadPhoto(event)"></label><span style="width:54px;height:54px;background:#ddd;border-radius:50%"></span><button class="main-btn" style="font-size:12px" onclick="go('describe')">${uiIcon('circleplus',16)} Describe Item</button></div>`)}
-function describe(){return layout(`<div class="fill"><div class="flow-header"><button class="back" onclick="go('${editingId!==null?'detail':'camera'}')" aria-label="Go back">${uiIcon('back',34)}</button><span class="eyebrow">${editingId!==null?'Edit clothing item':'Add clothing item'}</span></div><div class="description-field"><label class="eyebrow" for="description">Input item details</label><input class="field" id="description" placeholder="Enter Item Description" value="${escapeHTML(newDesc)}" oninput="newDesc=this.value" /></div><div class="bottom-action"><button class="main-btn" onclick="confirmDescription()">Confirm</button></div></div>`)}
-function confirmItem(){const current=editingId!==null?items.find(it=>it.id===editingId):null;return layout(`<div class="flow-header"><button class="back" onclick="go('describe')" aria-label="Go back">${uiIcon('back',34)}</button></div><h1 class="page-title center" style="margin-top:8px;margin-bottom:0">Is this Correct?</h1><div class="eyebrow center">Tap to edit properties</div><div class="confirm-card">${uploadedImage?`<img src="${escapeHTML(uploadedImage)}" alt="Selected item">`:'<div class="empty-confirm-photo">No photo selected</div>'}<div class="stats"><div><div class="stat-title">DESCRIPTION</div><div class="stat-value">${escapeHTML(newDesc||'New item')}</div></div><div><label class="stat-title" for="new-category">CATEGORY</label><select id="new-category">${['Jacket','Top','Bottoms','Shoes','Accessory'].map(c=>`<option ${current?.category===c?'selected':''}>${c}</option>`).join('')}</select></div></div></div><div class="confirm-actions"><button class="main-btn" onclick="addItem()">${current?'Save changes':'Add to wardrobe'}</button></div>`)}
-function signin(){return layout(`<div class="fill"><h1 class="auth-title">Sign in</h1><div class="eyebrow field-label">Email</div><input class="field" id="email" type="email" placeholder="Email"><div class="eyebrow field-label">Password</div><input class="field" id="password" type="password" placeholder="Password"><button class="pill sign-actions" onclick="notice('Real account sign-in requires an authentication service. Use Sign up to try this demo.')">Proceed</button><button class="pill google-btn" onclick="notice('Google sign-in requires an authentication service.')">Sign in with Google</button><button class="link-btn" onclick="go('signup')">Sign up?</button></div>`)}
-function signup(){return layout(`<div class="fill"><h1 class="auth-title" style="margin-top:12px">Let's get you started</h1><div class="eyebrow field-label">Name</div><div class="two-fields"><input class="field" id="first" placeholder="First Name"><input class="field" id="last" placeholder="Last Name"></div><div class="two-fields" style="margin-top:34px"><div style="width:50%"><div class="eyebrow">Gender</div><div class="gender" style="margin-top:16px"><label><input name="gender" type="radio"> Male</label><label><input name="gender" type="radio"> Other</label><label><input name="gender" type="radio"> Female</label></div></div><div style="width:50%"><div class="eyebrow">Date of birth</div><input class="field" type="text" placeholder="DD/MM/YYYY" style="font-size:15px"></div></div><div class="group-label" style="margin-top:45px">Allow permissions</div><div class="setting-row"><div>Photo Gallery Permission<div class="sub">Import clothing images from Library</div></div><button class="switch on" onclick="this.classList.toggle('on')"><span></span></button></div><div class="setting-row"><div>Camera Permission<div class="sub">Use camera to add clothing</div></div><button class="switch on" onclick="this.classList.toggle('on')"><span></span></button></div><div class="bottom-action"><button class="pill" onclick="finishSignup()">Let's get fitted out</button></div></div>`)}
-const routes={home,wardrobe,preferences,profile,detail,camera,describe,confirm:confirmItem,signin,signup};
-function render(){if(!routes[screen])screen='home';app.innerHTML=routes[screen]();document.getElementById('notes')?.addEventListener('input',e=>{settings.notes=e.target.value;save()});app.querySelector('.screen-content')?.scrollTo(0,0)}
-function go(page){screen=page;if(location.hash.slice(1)!==page){location.hash=page}else{render()}}
-window.addEventListener('hashchange',()=>{screen=location.hash.slice(1)||'home';render()});
-function selectItem(id){selected=id;go('detail')}
-function filterItems(){const cat=document.getElementById('category').value,col=document.getElementById('color').value,season=document.getElementById('season').value;document.getElementById('wardrobeItems').innerHTML=items.filter(it=>(!cat||it.category===cat)&&(!col||it.colour===col)&&(!season||it.season===season)).map(it=>card(it,true)).join('')||'<p class="empty-wardrobe">No matching clothes.</p>'}
-function toggleSetting(key){settings[key]=!settings[key];save();render()}
-function notice(message){document.querySelector('.toast')?.remove();const x=document.createElement('div');x.className='toast';x.textContent=message;document.body.append(x);clearTimeout(toastTimer);toastTimer=setTimeout(()=>x.remove(),3500)}
-function loadPhoto(e){const file=e.target.files?.[0];if(!file)return;if(file.size>3e6){notice('Please select an image smaller than 3 MB for local demo storage.');return}const reader=new FileReader();reader.onload=()=>{uploadedImage=reader.result;render()};reader.readAsDataURL(file)}
-function confirmDescription(){newDesc=document.getElementById('description').value.trim();if(!newDesc){notice('Enter an item description first.');return}go('confirm')}
-function addItem(){const category=document.getElementById('new-category').value;let changed;if(editingId!==null){changed=items.find(it=>it.id===editingId);if(changed){Object.assign(changed,{category,name:newDesc,image:uploadedImage||undefined})}}else{changed={id:Date.now(),category,name:newDesc,image:uploadedImage||undefined,colour:'All'};items.unshift(changed)}try{save()}catch{if(changed)changed.image=undefined;try{save();notice('Saved without image because browser storage is full.')}catch{notice('Could not save item: browser storage is full.');return}}editingId=null;newDesc='';uploadedImage='';go('wardrobe')}
-function editItem(){const it=items.find(x=>x.id===selected);if(!it)return;editingId=it.id;newDesc=it.name||'';uploadedImage=it.image||'';go('describe')}
-function startAddItem(){editingId=null;newDesc='';uploadedImage='';go('camera')}
-function removeItem(id){const it=items.find(x=>x.id===id);if(!it)return;if(!window.confirm(`Remove \"${it.name}\" from your wardrobe?`))return;items=items.filter(x=>x.id!==id);save();if(selected===id)selected=items[0]?.id??null;if(editingId===id)editingId=null;go('wardrobe');notice('Item removed from wardrobe.')}
-function finishSignup(){const name=document.getElementById('first').value.trim();if(!name){notice('Enter your first name.');return}localStorage.setItem('fit_name',JSON.stringify(name));go('home')}
-render();
+
+function icon(name, size = 24) {
+  return `<svg class="ui-icon" width="${size}" height="${size}"
+      viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
+      aria-hidden="true">${iconDrawings[name] || ''}</svg>`;
+}
+
+function statusBar() {
+  return `<div class="status"><span>9:41</span><span class="status-icons">
+    <svg width="23" height="16" viewBox="0 0 23 16" aria-hidden="true">
+      <rect x="1" y="11" width="4" height="4" rx=".7"/>
+      <rect x="7" y="8" width="4" height="7" rx=".7"/>
+      <rect x="13" y="4" width="4" height="11" rx=".7"/>
+      <rect x="19" y="1" width="4" height="14" rx=".7"/>
+    </svg>
+    <svg width="19" height="16" viewBox="0 0 20 17" aria-hidden="true">
+      <path d="M2 6c4.5-4.3 11.5-4.3 16 0M5 9c2.9-2.8 7.1-2.8 10 0M8 12c1.1-1 2.9-1 4 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="10" cy="15" r="1.2"/>
+    </svg>
+    <svg width="29" height="16" viewBox="0 0 30 16" aria-hidden="true">
+      <rect x="1" y="2" width="24" height="12" rx="3" stroke="currentColor" stroke-width="1.5" fill="none"/>
+      <rect x="3.5" y="4.5" width="19" height="7" rx="1"/>
+      <path d="M26.5 6v4a2 2 0 0 0 0-4"/>
+    </svg>
+  </span></div>`;
+}
+
+const navigationItems = [
+  ['home', 'home', 'HOME'],
+  ['wardrobe', 'wardrobe', 'WARDROBE'],
+  ['camera', 'plus', ''],
+  ['preferences', 'sliders', 'PREFERENCES'],
+  ['profile', 'user', 'PROFILE']
+];
+
+function bottomNavigation(activePage) {
+  const buttons = navigationItems.map(([destination, picture, label]) => {
+    const active = destination === activePage;
+    const action = destination === 'camera' ? 'startNewItem()' : `go('${destination}')`;
+
+    return `<button onclick="${action}" class="${active ? 'active' : ''}"
+        aria-label="${destination === 'camera' ? 'Add clothing item' : destination}">
+      <span class="${destination === 'camera' ? 'plus-circle' : 'nav-icon'}">
+        ${icon(picture, destination === 'camera' ? 30 : 24)}
+      </span>${label}</button>`;
+  });
+
+  return `<nav class="nav" aria-label="Main navigation">${buttons.join('')}</nav>`;
+}
+
+// All pages use the SAME phone frame (and scroll inside it).
+function pageLayout(content, activeNavigation = '', background = '') {
+  return `<main class="phone ${background}">
+    ${statusBar()}
+    <div class="screen-content ${activeNavigation ? 'with-nav' : ''}">${content}</div>
+    ${activeNavigation ? bottomNavigation(activeNavigation) : ''}
+  </main>`;
+}
+
+function backButton(destination) {
+  return `<button class="back" onclick="go('${destination}')" aria-label="Go back">
+    ${icon('back', 34)}
+  </button>`;
+}
+
+function clothingCard(item, showDeleteButton = false) {
+  const isEmpty = item.id == null;
+  const action = isEmpty ? 'startNewItem()' : `selectItem(${Number(item.id)})`;
+  const picture = item.image
+    ? `<img src="${safe(item.image)}" alt="${safe(item.name)}">`
+    : '<div class="empty-item-photo"></div>';
+
+  const removeButton = showDeleteButton && !isEmpty
+    ? `<button class="remove-card" onclick="removeItem(${Number(item.id)})"
+          aria-label="Remove ${safe(item.name)}">×</button>`
+    : '';
+
+  return `<div class="item-card-wrap">
+    <button class="item-card" onclick="${action}">
+      ${picture}
+      <div class="item-details">
+        <div class="item-label">${safe(item.category)}</div>
+        <div class="item-name">${safe(item.name)}</div>
+      </div>
+    </button>
+    ${removeButton}
+  </div>`;
+}
+
+function largeButton(label, clickAction) {
+  return `<button class="pill" onclick="${clickAction}">${label}</button>`;
+}
+
