@@ -1,13 +1,4 @@
-/*
-  FIT_TUNG — SCREEN DESIGN (screens.js)
-  These functions create the HTML for each page.
-  For what buttons DO, see actions.js.
-  For SQL access, see database.js.
-*/
-
-// ============================================================
-// 3. MAIN PAGES — HOME, WARDROBE, PREFERENCES, PROFILE
-// ============================================================
+//main pages
 
 function homePage() {
   const outfit = dailyOutfit();
@@ -179,9 +170,7 @@ function detailPage() {
   `, 'wardrobe');
 }
 
-// ============================================================
-// 4. ADD AND EDIT CLOTHING PAGES
-// ============================================================
+//add and edit clothes
 
 function cameraPage() {
   const preview = cameraStream
@@ -294,9 +283,7 @@ function confirmationPage() {
   `);
 }
 
-// ============================================================
-// 5. SIGN-IN SCREENS (UI DEMO — NO REAL ACCOUNTS YET)
-// ============================================================
+//sign in screens
 
 function signInPage() {
   return pageLayout(`
