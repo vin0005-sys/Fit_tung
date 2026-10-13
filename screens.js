@@ -10,24 +10,22 @@
 // ============================================================
 
 function homePage() {
-  const categories = ['Jacket', 'Accessory', 'Bottoms', 'Shoes'];
-  const outfit = categories.map(category =>
-    clothes.find(item => item.category === category) ||
-    { id: null, category: category, name: 'Add an item' }
-  );
-
+  const outfit = dailyOutfit();
+  const dateLabel = new Date().toLocaleDateString('en-AU', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  const event = getNextEventToday();
+  const summary = event && calendarIsFormalDay() && settings.formal ? ' — consider a smarter outfit' : '';
   return pageLayout(`
-    <div class="eyebrow">Friday, September 4, 2026</div>
+    <div class="eyebrow">${safe(dateLabel)}</div>
     <h1 class="page-title">Today's Recommended Outfit</h1>
     <div class="outfit-grid">${outfit.map(item => clothingCard(item)).join('')}</div>
     <h2 class="section-title">Why this works</h2>
     <div class="reason">
       <span class="reason-icon">${icon('cloudsun', 19)}</span>
-      <div><b>Weather</b><br>Partly cloudy, 18°C – perfect for breathable lightweight layers</div>
+      <div><b>Weather</b><br>${safe(weatherText())}</div>
     </div>
     <div class="reason">
       <span class="reason-icon">${icon('calendar', 19)}</span>
-      <div><b>Schedule</b><br>Coffee meeting at 10:00 AM – elegant smart casual posture</div>
+      <div><b>Schedule</b><br>${safe(scheduleText() + summary)}</div>
     </div>
   `, 'home');
 }
@@ -76,17 +74,24 @@ function preferencesPage() {
     <div class="group-label" style="margin-top:38px">Data integrations</div>
     <div class="setting-row">
       <div><div class="setting-copy">Location &amp; Weather</div>
-      <div class="sub">Sync outfit suggestions with live forecasts</div></div>
-      <button class="mini-button" onclick="notice('Live weather syncing needs a weather API.')">
-        ${icon('cloud', 15)} Sync</button>
+      <div class="sub">${safe(weatherLocation ? weatherLocation.name + ' · ' + weatherDescription(currentWeather?.current?.weather_code) : 'Choose a location for live forecasts')}</div></div>
+      <button class="mini-button" onclick="syncWeather()">${icon('cloud', 15)} Sync</button>
+    </div>
+    <div class="integration-tools">
+      <input id="weather-city" aria-label="Weather city" placeholder="Or enter city" autocomplete="address-level2">
+      <button class="mini-button" onclick="setWeatherCity()">Set city</button>
     </div>
     <div class="setting-row">
       <div><div class="setting-copy">Connected Calendars</div>
-      <div class="sub">Adapt posture recommendations based on schedule events</div></div>
-      <button class="mini-button dark" onclick="notice('Calendar connection requires authentication.')">
-        ${icon('circleplus', 15)} Add</button>
-      <button class="mini-button" onclick="notice('No calendar connected yet.')">
-        ${icon('calendar', 15)} Edit</button>
+      <div class="sub">${safe(calendarSource ? calendarSource + ' · ' + calendarEvents.length + ' events' : 'Connect Google or import a calendar')}</div></div>
+      <button class="mini-button dark" onclick="connectGoogleCalendar()">${icon('circleplus', 15)} Google</button>
+      <button class="mini-button" onclick="refreshGoogleCalendar()">${icon('calendar', 15)} Sync</button>
+    </div>
+    <div class="integration-tools">
+      <label class="mini-button calendar-import">Import .ics
+        <input type="file" accept=".ics,text/calendar" onchange="importICS(event)" hidden>
+      </label>
+      ${calendarSource ? '<button class="mini-button" onclick="disconnectCalendar()">Disconnect</button>' : ''}
     </div>
     <div class="group-label">Recommendation model</div>
     ${switchRow('formal', 'Formal Outfit Weighting', 'Prioritise tailored suits & pleated silhouettes')}
@@ -113,7 +118,7 @@ function profilePage() {
     <details class="accordion"><summary>Account</summary>
       <div>Name: ${safe(cloudUser?.user_metadata?.first_name || loadData('fit_name', 'Guest'))}
         <p class="preview-note">${cloudUser
-          ? 'Your wardrobe and preferences are saved to your private SQL account.'
+          ? 'Your wardrobe and preferences are saved in SQLite.'
           : 'Your clothes and settings are currently saved in this browser.'}</p>
         ${cloudUser
           ? `<button class="mini-button" onclick="signOut()">Sign out</button>
@@ -179,22 +184,27 @@ function detailPage() {
 // ============================================================
 
 function cameraPage() {
-  const preview = itemImage
-    ? `<img src="${safe(itemImage)}" alt="Selected clothing photo" style="max-width:100%;max-height:100%;object-fit:contain">`
-    : icon('camera', 54);
+  const preview = cameraStream
+    ? '<video id="live-camera" autoplay playsinline muted aria-label="Live camera preview"></video>'
+    : itemImage
+      ? `<img src="${safe(itemImage)}" alt="Selected clothing photo">`
+      : icon('camera', 54);
 
   return pageLayout(`
     <div class="flow-header">${backButton('wardrobe')}<span class="eyebrow">Add clothing</span></div>
     <div class="photo-box">${preview}</div>
     <div class="camera-actions">
-      <label title="Choose clothing photo">${icon('image', 31)}
+      <label title="Choose clothing photo" aria-label="Choose photo from device">${icon('image', 31)}
         <input type="file" accept="image/*" style="display:none" onchange="loadPhoto(event)">
       </label>
-      <span style="width:54px;height:54px;background:#ddd;border-radius:50%"></span>
+      ${cameraStream
+        ? `<button class="capture-button" onclick="takePhoto()" aria-label="Take photo"></button>`
+        : `<button class="capture-button" onclick="startCamera()" aria-label="Start camera">${icon('camera', 24)}</button>`}
       <button class="main-btn" style="font-size:12px" onclick="go('describe')">
         ${icon('circleplus', 16)} Describe Item
       </button>
     </div>
+    ${cameraStream ? '<button class="camera-switch" onclick="toggleCamera()">Switch camera</button>' : ''}
   `);
 }
 
@@ -297,7 +307,7 @@ function signInPage() {
       <div class="eyebrow field-label">Password</div>
       <input class="field" id="password" type="password" placeholder="Password">
       <button class="pill sign-actions" onclick="signIn()">Proceed</button>
-      <button class="pill google-btn" onclick="signInWithGoogle()">Sign in with Google</button>
+      <button class="pill google-btn" onclick="signInWithGoogle()">Google sign-in (unavailable with SQLite)</button>
       <button class="link-btn" onclick="go('signup')">Sign up?</button>
     </div>
   `);
@@ -324,7 +334,7 @@ function signUpPage() {
       ${FitDatabase.enabled() ? `
         <div class="eyebrow field-label">Email (for your account)</div>
         <input class="field" id="signup-email" type="email" autocomplete="email" placeholder="Email">
-        <div class="eyebrow field-label">Password (at least 6 characters)</div>
+        <div class="eyebrow field-label">Password (at least 8 characters)</div>
         <input class="field" id="signup-password" type="password" autocomplete="new-password" placeholder="Password">
       ` : ''}
       <div class="group-label" style="margin-top:45px">Allow permissions</div>

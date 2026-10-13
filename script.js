@@ -5,11 +5,10 @@
   This file: starter data, app state, common UI parts and icons.
   screens.js: the HTML for each screen.
   actions.js: buttons, navigation and saving items.
-  database.js: optional SQL login and database requests.
+  database.js: SQLite requests to the Python server.
 
-  Without Supabase, this app saves data in the current browser.
-  If Supabase is configured, signed-in users save to the SQL database.
-  The optional database code is kept separately in database.js.
+  On GitHub Pages, data is saved in the browser.
+  With the Flask server, signed-in users save to SQLite.
 */
 
 // ============================================================

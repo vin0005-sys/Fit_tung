@@ -1,4 +1,14 @@
-// Navigation buttons n stuff
+/*
+  FIT_TUNG — BUTTONS AND NAVIGATION (actions.js)
+  Main concepts: functions, arrays, if statements, events and localStorage.
+  See script.js for shared data; screens.js for each page's HTML.
+*/
+
+// ============================================================
+// 6. NAVIGATION AND BUTTON ACTIONS
+// ============================================================
+
+// Map the page name to its drawing function.
 const pages = {
   home: homePage,
   wardrobe: wardrobePage,
@@ -28,6 +38,7 @@ function render() {
 }
 
 function go(destination) {
+  if (page === 'camera' && destination !== 'camera') stopCamera();
   page = destination;
   if (location.hash.slice(1) === destination) {
     render();
@@ -37,7 +48,9 @@ function go(destination) {
 }
 
 window.addEventListener('hashchange', () => {
-  page = location.hash.slice(1) || 'home';
+  const next = location.hash.slice(1) || 'home';
+  if (page === 'camera' && next !== 'camera') stopCamera();
+  page = next;
   render();
 });
 
@@ -79,6 +92,7 @@ function notice(message) {
 }
 
 function startNewItem() {
+  stopCamera();
   editingId = null;
   itemDescription = '';
   itemImage = '';
@@ -88,6 +102,7 @@ function startNewItem() {
 function loadPhoto(event) {
   const file = event.target.files?.[0];
   if (!file) return;
+  stopCamera();
   if (file.size > 3000000) {
     notice('Choose a photo smaller than 3 MB.');
     return;
@@ -220,7 +235,7 @@ async function removeItem(id) {
   notice('Item removed from wardrobe.');
 }
 
-// Load the user's private wardrobe and settings from PostgreSQL.
+// Read clothing and preferences from the user's SQLite account.
 async function loadCloudData() {
   if (!cloudUser) return;
   // Retrieve everything before replacing the displayed local data.
@@ -234,10 +249,10 @@ async function loadCloudData() {
   render();
 }
 
-// Log in with Supabase email/password authentication.
+// Log in with the Python/SQLite account.
 async function signIn() {
   if (!FitDatabase.enabled()) {
-    notice('To enable accounts, set up Supabase using README.md.');
+    notice('SQLite accounts require the Python server. Run python app.py.');
     return;
   }
 
@@ -246,30 +261,19 @@ async function signIn() {
   if (!email || !password) return notice('Enter your email and password.');
 
   try {
-    if (!FitDatabase.client) await FitDatabase.start();
     const user = await FitDatabase.signIn(email, password);
     cloudUser = user;
     await loadCloudData();
     go('wardrobe');
-    notice('Signed in. Your SQL wardrobe is ready.');
+    notice('Signed in. Your SQLite wardrobe is ready.');
   } catch (error) {
     notice('Sign-in failed: ' + error.message);
   }
 }
 
-// Google OAuth requires enabling Google in your Supabase Auth dashboard.
+// Google login is separate from the Google Calendar connection.
 async function signInWithGoogle() {
-  if (!FitDatabase.enabled()) return notice('Connect Supabase first.');
-  try {
-    if (!FitDatabase.client) await FitDatabase.start();
-    const { error } = await FitDatabase.client.auth.signInWithOAuth({
-      provider: 'google',
-      options: { redirectTo: location.origin + location.pathname }
-    });
-    if (error) throw error;
-  } catch (error) {
-    notice('Google sign-in: ' + error.message);
-  }
+  notice('Use email and password for SQLite accounts. Google Calendar connects separately in Preferences.');
 }
 
 async function signOut() {
@@ -323,12 +327,11 @@ async function finishSignup() {
 
   const email = document.getElementById('signup-email').value.trim();
   const password = document.getElementById('signup-password').value;
-  if (!email || password.length < 6) {
-    notice('Enter an email and password with at least 6 characters.');
+  if (!email || password.length < 8) {
+    notice('Enter an email and password with at least 8 characters.');
     return;
   }
   try {
-    if (!FitDatabase.client) await FitDatabase.start();
     const result = await FitDatabase.signUp(email, password, firstName);
     if (result.session) {
       cloudUser = result.user;
@@ -336,23 +339,24 @@ async function finishSignup() {
       go('wardrobe');
     } else {
       go('signin');
-      notice('Check your email to confirm your account, then sign in.');
+      notice('Account created. Sign in to continue.');
     }
   } catch (error) {
     notice('Sign-up failed: ' + error.message);
   }
 }
 
-// When the page opens, restore an existing Supabase session if configured.
+// Restore a SQLite session if the Python server is running.
 async function startApp() {
   render();
+  updateIntegrations();
   if (!FitDatabase.enabled()) return;
   try {
     cloudUser = await FitDatabase.start();
     if (cloudUser) await loadCloudData();
   } catch (error) {
     cloudUser = null;
-    notice('SQL connection unavailable: ' + error.message);
+    notice('SQLite connection unavailable: ' + error.message);
   }
 }
 

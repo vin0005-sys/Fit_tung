@@ -968,3 +968,21 @@ body {
     font-size: 18px;
   }
 }
+
+/* Camera and connected services */
+.photo-box video, .photo-box img {
+  width: 100%; height: 100%; object-fit: contain; border-radius: 17px;
+}
+.photo-box video { object-fit: cover; }
+.capture-button {
+  width: 56px; height: 56px; border: 5px solid #eee; border-radius: 50%;
+  background: #fff; display: grid; place-items: center; flex: 0 0 56px;
+}
+.camera-switch { display: block; margin: 12px auto; background: #fff9; padding: 8px 18px; border-radius: 20px; border: 0; }
+.integration-tools { display: flex; gap: 8px; align-items: center; padding: 5px 0 16px; }
+.integration-tools input:not([type=file]) {
+  width: 100%; min-width: 0; flex: 1; border: 1px solid #ffffff99;
+  background: #ffffff88; border-radius: 12px; padding: 9px 12px; font-size: 13px;
+}
+.integration-tools .mini-button { flex: 0 0 auto; white-space: nowrap; }
+.calendar-import { cursor: pointer; }
