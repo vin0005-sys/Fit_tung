@@ -1,14 +1,4 @@
-/*
-  FIT_TUNG — BUTTONS AND NAVIGATION (actions.js)
-  Main concepts: functions, arrays, if statements, events and localStorage.
-  See script.js for shared data; screens.js for each page's HTML.
-*/
-
-// ============================================================
-// 6. NAVIGATION AND BUTTON ACTIONS
-// ============================================================
-
-// Map the page name to its drawing function.
+//Navigation and buttons
 const pages = {
   home: homePage,
   wardrobe: wardrobePage,
