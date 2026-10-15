@@ -61,3 +61,14 @@ For an online multi-user production service, a managed SQL database and more sec
 - `assets/`: clothing image
 
 Old `Page 1 CSS.css`, `Page 2 HTML.html`, other `Page N CSS.css`, `database-config.js` and old PostgreSQL `sql/setup.sql` are not needed in this version.
+
+## Starter wardrobe from DB Browser
+
+`starter-wardrobe.json` contains eight example items exported from `wardrobe_database.db`.
+The public GitHub Pages app copies the starter records into each new visitor's browser storage.
+People can then add, edit and delete clothes independently. Clearing browser storage resets that person's wardrobe.
+Existing visitors keep their saved wardrobes; the update does not replace their items.
+Photos were not present in the SQLite source, so starter garments use simple category illustrations.
+
+New accounts on the optional Flask/SQLite server receive independent starter rows too.
+Do not upload the original `.db` file to the public site; the JSON is enough.

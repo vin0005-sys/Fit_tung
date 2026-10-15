@@ -1,4 +1,14 @@
-//Navigation and buttons
+/*
+  FIT_TUNG — BUTTONS AND NAVIGATION (actions.js)
+  Main concepts: functions, arrays, if statements, events and localStorage.
+  See script.js for shared data; screens.js for each page's HTML.
+*/
+
+// ============================================================
+// 6. NAVIGATION AND BUTTON ACTIONS
+// ============================================================
+
+// Map the page name to its drawing function.
 const pages = {
   home: homePage,
   wardrobe: wardrobePage,
@@ -54,10 +64,11 @@ function filterItems() {
   const colour = document.getElementById('color').value;
   const season = document.getElementById('season').value;
 
+  // A piece can have more than one colour and be used in multiple seasons.
   const matches = clothes.filter(item =>
     (!category || item.category === category) &&
-    (!colour || item.colour === colour) &&
-    (!season || item.season === season)
+    (!colour || (item.colour || '').split(',').map(x => x.trim()).includes(colour)) &&
+    (!season || (item.season || '').split(',').map(x => x.trim()).includes(season))
   );
 
   document.getElementById('wardrobeItems').innerHTML = matches.length
@@ -350,5 +361,28 @@ async function startApp() {
   }
 }
 
-// Start the app when the page loads.
-startApp();
+// Load starter clothes only for browsers with no saved wardrobe.
+// Once saved, additions/deletions are private to that browser.
+async function loadStarterItems() {
+  if (localStorage.getItem('fit_items') !== null) return;
+  try {
+    const response = await fetch('starter-wardrobe.json');
+    if (!response.ok) throw new Error('Starter clothes could not be loaded');
+    const items = await response.json();
+    if (!Array.isArray(items)) throw new Error('Invalid starter wardrobe');
+    starterClothes.push(...items);
+    clothes = items.map(item => ({ ...item }));
+    selectedId = clothes[0]?.id ?? null;
+    saveData();
+  } catch (error) {
+    console.error('Could not load starter clothes:', error);
+  }
+}
+
+const originalStartApp = startApp;
+async function initialiseApp() {
+  await loadStarterItems();
+  await originalStartApp();
+}
+
+initialiseApp();

@@ -1,6 +1,7 @@
 """Fit_tung: Flask website and SQLite database."""
 
 import os
+import json
 import re
 import sqlite3
 from pathlib import Path
@@ -106,8 +107,10 @@ def home():
 @app.route("/<path:filename>")
 def public_file(filename):
     public = {"index.html", "styles.css", "script.js", "screens.js", "actions.js",
-              "database.js", "integrations.js", "calendar-config.js"}
-    if filename not in public and filename != "assets/windbreaker.png":
+              "database.js", "integrations.js", "calendar-config.js", "starter-wardrobe.json"}
+    starter_images = {f"assets/starter-{name}.svg" for name in
+                      ("jacket", "top", "bottoms", "shoes", "accessory")}
+    if filename not in public and filename != "assets/windbreaker.png" and filename not in starter_images:
         abort(404)
     return send_from_directory(ROOT, filename)
 
@@ -116,6 +119,19 @@ def public_file(filename):
 def who_am_i():
     user = current_user()
     return jsonify(user=user_json(user) if user else None)
+
+
+def add_starter_items(db, user_id):
+    """Give each new SQLite account its own copies of the starter items."""
+    starter_items = json.loads((ROOT / "starter-wardrobe.json").read_text(encoding="utf-8"))
+    for item in starter_items:
+        db.execute("""INSERT INTO clothing_items
+                   (user_id, name, category, brand, colour, style, size,
+                    weight, has_zip, last_worn, season, image_data)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                   (user_id, item["name"], item["category"], item["brand"],
+                    item["colour"], item["style"], item["size"], item["weight"],
+                    None, item["last"], item["season"], item["image"]))
 
 
 @app.post("/api/signup")
@@ -130,6 +146,7 @@ def signup():
     try:
         cursor = db.execute("INSERT INTO users (email, first_name, password_hash) VALUES (?, ?, ?)",
                             (email, first_name, generate_password_hash(password)))
+        add_starter_items(db, cursor.lastrowid)
         db.commit()
     except sqlite3.IntegrityError:
         abort(409, "An account with that email already exists.")
@@ -184,8 +201,10 @@ def clothing_values(data):
     if not name or category not in CATEGORIES:
         abort(400, "Choose a name and valid clothing category.")
     image = str(data.get("image", ""))
-    if len(image) > 2300000 or (image and not (image.startswith("data:image/jpeg;base64,") or image == "assets/windbreaker.png")):
-        abort(400, "Image must be a small JPEG photo.")
+    permitted_image = image == "assets/windbreaker.png" or bool(re.fullmatch(
+        r"assets/starter-(jacket|top|bottoms|shoes|accessory)\.svg", image))
+    if len(image) > 2300000 or (image and not (image.startswith("data:image/jpeg;base64,") or permitted_image)):
+        abort(400, "Image must be a small JPEG photo or starter illustration.")
     zip_value = data.get("zip")
     return (name, category, str(data.get("brand") or "")[:120],
             str(data.get("colour") or "")[:80], str(data.get("style") or "")[:120],

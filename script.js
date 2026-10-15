@@ -1,18 +1,25 @@
-//data and settings
+/*
+  FIT_TUNG — OUTFIT PLANNER
+  This is a front-end school project, using plain JavaScript.
+
+  This file: starter data, app state, common UI parts and icons.
+  screens.js: the HTML for each screen.
+  actions.js: buttons, navigation and saving items.
+  database.js: SQLite requests to the Python server.
+
+  On GitHub Pages, data is saved in the browser.
+  With the Flask server, signed-in users save to SQLite.
+*/
+
+// ============================================================
+// 1. DATA AND SETTINGS
+// ============================================================
 
 const app = document.getElementById('app');
 const jacketImage = 'assets/windbreaker.png';
 
-const starterClothes = [
-  { id: 1, category: 'Jacket', name: 'Windbreaker', brand: 'Nike', colour: 'Navy',
-    style: 'Jacket', weight: 'Lightweight', zip: true, size: '',
-    last: 'September 18, 2026', image: jacketImage },
-  { id: 2, category: 'Bottoms', name: 'Placeholder', colour: 'All' },
-  { id: 3, category: 'Shoes', name: 'Placeholder', colour: 'All' },
-  { id: 4, category: 'Accessory', name: 'Placeholder', colour: 'All' },
-  { id: 5, category: 'Top', name: 'Placeholder', colour: 'All' },
-  { id: 6, category: 'Bottoms', name: 'Placeholder', colour: 'All' }
-];
+// Filled from the starter JSON for new visitors; never shared between browsers.
+const starterClothes = [];
 
 const starterSettings = {
   formal: true,
@@ -35,7 +42,7 @@ let settings = loadData('fit_settings', starterSettings);
 
 // Variables that describe what the user is currently doing.
 let page = location.hash.slice(1) || 'home';
-let selectedId = 1;
+let selectedId = clothes[0]?.id ?? null;
 let editingId = null;             // null means we're ADDING, not editing
 let itemDescription = '';
 let itemImage = '';
@@ -75,7 +82,9 @@ function safe(text) {
   }[character]));
 }
 
-// this is for icons
+// ============================================================
+// 2. REUSABLE PAGE PARTS
+// ============================================================
 
 // SVG icons. Unlike emoji/text symbols, they look the same on every device.
 const iconDrawings = {
