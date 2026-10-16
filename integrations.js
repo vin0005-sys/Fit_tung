@@ -45,7 +45,7 @@ function weatherText() {
   const wet = [51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82, 95, 96, 99].includes(code);
   const advice = wet ? 'bring a water-resistant layer' : temp >= 25 ? 'choose light, breathable pieces' : temp <= 16 ? 'consider an extra layer' : 'comfortable layering weather';
   const place = weatherLocation?.name ? `${weatherLocation.name}: ` : '';
-  return `${place}${weatherDescription(code)}, ${Math.round(temp)}°C — ${advice}`;
+  return `${place}${weatherDescription(code)}, ${Math.round(temp)}°C. ${advice.charAt(0).toUpperCase() + advice.slice(1)}.`;
 }
 
 function availableItems(category) {

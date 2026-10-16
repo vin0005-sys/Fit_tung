@@ -1024,3 +1024,12 @@ body {
   width: 0;
   height: 0;
 }
+
+/* Home layout alignment */
+.screen-content > .outfit-grid {
+  max-width: none;
+}
+
+.outfit-grid + .section-title {
+  margin-top: 14px;
+}
