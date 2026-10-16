@@ -1026,7 +1026,9 @@ body {
 }
 
 /* Home layout alignment */
-.screen-content > .outfit-grid {
+/* Panels that intentionally extend into the side padding must use
+   their full width, otherwise the right margin appears larger. */
+.screen-content > :is(.outfit-grid, .detail-photo, .annotation-board, .confirm-card) {
   max-width: none;
 }
 
