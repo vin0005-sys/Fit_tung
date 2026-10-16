@@ -1,0 +1,1 @@
+Replace your existing styles.css in the main Fit_tung GitHub repository with this version. It adjusts the Profile chevrons and removes the visible internal scrollbar while preserving scroll. No other files need changing.

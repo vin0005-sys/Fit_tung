@@ -986,3 +986,41 @@ body {
 }
 .integration-tools .mini-button { flex: 0 0 auto; white-space: nowrap; }
 .calendar-import { cursor: pointer; }
+
+/* Profile dropdown arrows */
+.accordion summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  list-style: none;
+}
+.accordion summary::-webkit-details-marker {
+  display: none;
+}
+.accordion summary::before {
+  content: "";
+  display: block;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 24px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m5 9 7 7 7-7' fill='none' stroke='%23171719' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  transform: none;
+}
+.accordion[open] summary::before {
+  transform: rotate(180deg);
+}
+
+/* Keep content centred without a visible scrollbar */
+.screen-content {
+  scrollbar-gutter: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.screen-content::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
