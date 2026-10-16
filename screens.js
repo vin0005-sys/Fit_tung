@@ -1,19 +1,10 @@
-/*
-  FIT_TUNG — SCREEN DESIGN (screens.js)
-  These functions create the HTML for each page.
-  For what buttons DO, see actions.js.
-  For SQL access, see database.js.
-*/
-
-// ============================================================
-// 3. MAIN PAGES — HOME, WARDROBE, PREFERENCES, PROFILE
-// ============================================================
+// Main pages
 
 function homePage() {
   const outfit = dailyOutfit();
   const dateLabel = new Date().toLocaleDateString('en-AU', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
   const event = getNextEventToday();
-  const summary = event && calendarIsFormalDay() && settings.formal ? ' — consider a smarter outfit' : '';
+  const summary = event && calendarIsFormalDay() && settings.formal ? ' - consider a smarter outfit' : '';
   return pageLayout(`
     <div class="eyebrow">${safe(dateLabel)}</div>
     <h1 class="page-title">Today's Recommended Outfit</h1>
@@ -95,7 +86,7 @@ function preferencesPage() {
     </div>
     <div class="group-label">Recommendation model</div>
     ${switchRow('formal', 'Formal Outfit Weighting', 'Prioritise tailored suits & pleated silhouettes')}
-    ${switchRow('heat', 'Adaptive Heat Mitigation', 'Avoid heavier wool fabrics above 70°F')}
+    ${switchRow('heat', 'Adaptive Heat Mitigation', 'Avoid heavier wool fabrics above 20°C')}
     <div class="setting-row">
       <div><div class="setting-copy">Reference Outfits</div>
       <div class="sub">Add outfits to use as references<br>for your style</div></div>
@@ -179,9 +170,7 @@ function detailPage() {
   `, 'wardrobe');
 }
 
-// ============================================================
-// 4. ADD AND EDIT CLOTHING PAGES
-// ============================================================
+// add and edit clothing images
 
 function cameraPage() {
   const preview = cameraStream
@@ -294,9 +283,7 @@ function confirmationPage() {
   `);
 }
 
-// ============================================================
-// 5. SIGN-IN SCREENS (UI DEMO — NO REAL ACCOUNTS YET)
-// ============================================================
+//sign in screens
 
 function signInPage() {
   return pageLayout(`
