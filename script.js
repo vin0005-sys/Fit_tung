@@ -1,24 +1,9 @@
-/*
-  FIT_TUNG — OUTFIT PLANNER
-  This is a front-end school project, using plain JavaScript.
-
-  This file: starter data, app state, common UI parts and icons.
-  screens.js: the HTML for each screen.
-  actions.js: buttons, navigation and saving items.
-  database.js: SQLite requests to the Python server.
-
-  On GitHub Pages, data is saved in the browser.
-  With the Flask server, signed-in users save to SQLite.
-*/
-
-// ============================================================
-// 1. DATA AND SETTINGS
-// ============================================================
+/* data and settings */
 
 const app = document.getElementById('app');
 const jacketImage = 'assets/windbreaker.png';
 
-// Filled from the starter JSON for new visitors; never shared between browsers.
+// Filled from the starter JSON for new visitors, never shared between browsers.
 const starterClothes = [];
 
 const starterSettings = {
@@ -82,9 +67,7 @@ function safe(text) {
   }[character]));
 }
 
-// ============================================================
-// 2. REUSABLE PAGE PARTS
-// ============================================================
+// reusable page parts
 
 // SVG icons. Unlike emoji/text symbols, they look the same on every device.
 const iconDrawings = {
