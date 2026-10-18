@@ -1,1 +1,0 @@
-Upload styles.css and integrations.js to the root of your GitHub repository. Replace the existing files. Commit the changes and refresh the website with Ctrl + Shift + R. Keep the rest of your files unchanged.
