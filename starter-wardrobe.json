@@ -11,7 +11,7 @@
     "zip": null,
     "last": "",
     "season": "Autumn, Winter",
-    "image": "assets/starter-jacket.svg"
+    "image": "assets/realism 25.png"
   },
   {
     "id": 1001,
@@ -25,7 +25,7 @@
     "zip": null,
     "last": "",
     "season": "Autumn, Winter",
-    "image": "assets/starter-top.svg"
+    "image": "assets/high roller.png"
   },
   {
     "id": 1011,
@@ -39,7 +39,7 @@
     "zip": null,
     "last": "",
     "season": "Spring",
-    "image": "assets/starter-top.svg"
+    "image": "assets/cn casino.png"
   },
   {
     "id": 1004,
@@ -53,7 +53,7 @@
     "zip": null,
     "last": "",
     "season": "Autumn",
-    "image": "assets/starter-bottoms.svg"
+    "image": "assets/light jeans.png"
   },
   {
     "id": 1006,
@@ -67,7 +67,7 @@
     "zip": null,
     "last": "",
     "season": "Autumn, Winter, Spring",
-    "image": "assets/starter-bottoms.svg"
+    "image": "assets/cargos.png"
   },
   {
     "id": 1007,
@@ -81,7 +81,7 @@
     "zip": null,
     "last": "",
     "season": "Autumn, Spring",
-    "image": "assets/starter-shoes.svg"
+    "image": "assets/dunk low.png"
   },
   {
     "id": 1012,
@@ -95,7 +95,7 @@
     "zip": null,
     "last": "",
     "season": "Winter",
-    "image": "assets/starter-shoes.svg"
+    "image": "assets/book 1s.png"
   },
   {
     "id": 1008,
@@ -109,6 +109,6 @@
     "zip": null,
     "last": "",
     "season": "Autumn",
-    "image": "assets/starter-accessory.svg"
+    "image": "assets/mh ring.png"
   }
 ]
