@@ -1035,3 +1035,20 @@ body {
 .outfit-grid + .section-title {
   margin-top: 14px;
 }
+
+/* Profile sizing inputs */
+.basic-sizing { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+.basic-sizing select, .sizing-select {
+  min-width: 0; border: 1px solid #171719; border-radius: 22px;
+  background: #ffffff66; padding: 10px 12px; color: #171719;
+}
+.sizing-panel { padding-top: 0; }
+.sizing-help { margin: 0 0 14px; color: #687386; font-size: 12px; }
+.sizing-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px 12px; }
+.sizing-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.sizing-field > span { font-size: 12px; color: #555d6c; font-weight: 600; }
+.sizing-field input.sizing-input { width: 100%; height: 42px; min-width: 0; font-size: 14px; padding: 0 12px; }
+.sizing-select { height: 42px; width: 100%; padding: 0 8px; font-size: 13px; }
+.sizing-privacy { margin: 14px 0 8px; line-height: 1.5; }
+.clear-sizing { border: 0; background: transparent; text-decoration: underline; padding: 4px 0;
+  font-size: 12px; color: #555d6c; }

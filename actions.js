@@ -1,4 +1,12 @@
-//Navigation and button icons
+/*
+  FIT_TUNG — BUTTONS AND NAVIGATION (actions.js)
+  Main concepts: functions, arrays, if statements, events and localStorage.
+  See script.js for shared data; screens.js for each page's HTML.
+*/
+
+// ============================================================
+// 6. NAVIGATION AND BUTTON ACTIONS
+// ============================================================
 
 // Map the page name to its drawing function.
 const pages = {
@@ -66,6 +74,28 @@ function filterItems() {
   document.getElementById('wardrobeItems').innerHTML = matches.length
     ? matches.map(item => clothingCard(item, true)).join('')
     : '<p class="empty-wardrobe">No matching clothes.</p>';
+}
+
+function updateSizing(key, value) {
+  if (!(key in defaultSizing)) return;
+  if (key === 'basicSize' || key === 'fit') {
+    sizing[key] = value;
+  } else {
+    const number = Number(value);
+    sizing[key] = value !== '' && Number.isFinite(number) && number > 0 && number <= 300 ? value : '';
+  }
+  saveSizing();
+}
+
+function clearSizing() {
+  if (!window.confirm('Clear your saved measurements?')) return;
+  sizing = { ...defaultSizing, basicSize: sizing.basicSize };
+  saveSizing();
+  render();
+  const advanced = Array.from(document.querySelectorAll('.accordion'))
+    .find(section => section.querySelector('summary')?.textContent.includes('Advanced Sizing'));
+  if (advanced) advanced.open = true;
+  notice('Measurements cleared.');
 }
 
 function toggleSetting(key) {

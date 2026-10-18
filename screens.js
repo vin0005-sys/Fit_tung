@@ -1,10 +1,19 @@
-// Main pages
+/*
+  FIT_TUNG — SCREEN DESIGN (screens.js)
+  These functions create the HTML for each page.
+  For what buttons DO, see actions.js.
+  For SQL access, see database.js.
+*/
+
+// ============================================================
+// 3. MAIN PAGES — HOME, WARDROBE, PREFERENCES, PROFILE
+// ============================================================
 
 function homePage() {
   const outfit = dailyOutfit();
   const dateLabel = new Date().toLocaleDateString('en-AU', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
   const event = getNextEventToday();
-  const summary = event && calendarIsFormalDay() && settings.formal ? ' - consider a smarter outfit' : '';
+  const summary = event && calendarIsFormalDay() && settings.formal ? ' — consider a smarter outfit' : '';
   return pageLayout(`
     <div class="eyebrow">${safe(dateLabel)}</div>
     <h1 class="page-title">Today's Recommended Outfit</h1>
@@ -86,7 +95,7 @@ function preferencesPage() {
     </div>
     <div class="group-label">Recommendation model</div>
     ${switchRow('formal', 'Formal Outfit Weighting', 'Prioritise tailored suits & pleated silhouettes')}
-    ${switchRow('heat', 'Adaptive Heat Mitigation', 'Avoid heavier wool fabrics above 20°C')}
+    ${switchRow('heat', 'Adaptive Heat Mitigation', 'Avoid heavier wool fabrics above 70°F')}
     <div class="setting-row">
       <div><div class="setting-copy">Reference Outfits</div>
       <div class="sub">Add outfits to use as references<br>for your style</div></div>
@@ -99,6 +108,15 @@ function preferencesPage() {
     <p class="sub">Specify favorite brands, color palettes, or fabrics to prioritize/exclude:</p>
     <textarea id="notes" aria-label="Style preferences">${safe(settings.notes)}</textarea>
   `, 'preferences');
+}
+
+function sizingInput(key, label, placeholder = 'cm') {
+  return `<label class="sizing-field">
+    <span>${label}</span>
+    <input class="field sizing-input" type="number" min="0" max="300" step="0.5"
+      inputmode="decimal" placeholder="${placeholder}" value="${safe(sizing[key])}"
+      oninput="updateSizing('${key}', this.value)" aria-label="${label} in centimetres">
+  </label>`;
 }
 
 function profilePage() {
@@ -119,10 +137,33 @@ function profilePage() {
     </details>
     <div class="group-label" style="margin-top:45px">Sizing</div>
     <details class="accordion"><summary>Basic Sizing</summary>
-      <div>Size <select id="basic-size"><option>S</option><option>M</option><option>L</option><option>XL</option></select></div>
+      <div class="basic-sizing"><label for="basic-size">Usual clothing size</label>
+        <select id="basic-size" onchange="updateSizing('basicSize', this.value)">
+          ${['XS', 'S', 'M', 'L', 'XL', 'XXL'].map(size => `<option value="${size}" ${sizing.basicSize === size ? 'selected' : ''}>${size}</option>`).join('')}
+        </select>
+      </div>
     </details>
     <details class="accordion"><summary>Advanced Sizing (Recommended)</summary>
-      <div>Height <input class="field" type="number" placeholder="cm" style="height:42px;font-size:14px"></div>
+      <div class="sizing-panel">
+        <p class="sizing-help">Optional measurements in cm</p>
+        <div class="sizing-grid">
+          ${sizingInput('height', 'Height')}
+          ${sizingInput('chest', 'Chest')}
+          ${sizingInput('waist', 'Waist')}
+          ${sizingInput('hips', 'Hips')}
+          ${sizingInput('shoulders', 'Shoulder width')}
+          ${sizingInput('sleeve', 'Sleeve length')}
+          ${sizingInput('inseam', 'Inseam')}
+          <label class="sizing-field">
+            <span>Preferred fit</span>
+            <select class="sizing-select" onchange="updateSizing('fit', this.value)" aria-label="Preferred fit">
+              ${['Slim', 'Regular', 'Relaxed', 'No preference'].map(fit => `<option ${sizing.fit === fit ? 'selected' : ''}>${fit}</option>`).join('')}
+            </select>
+          </label>
+        </div>
+        <p class="sizing-help sizing-privacy">Saved on this device. You can leave any measurement empty.</p>
+        <button class="clear-sizing" onclick="clearSizing()">Clear measurements</button>
+      </div>
     </details>
     <div class="group-label" style="margin-top:48px">Accessibility</div>
     <details class="accordion"><summary>Accessibility</summary>
@@ -170,7 +211,9 @@ function detailPage() {
   `, 'wardrobe');
 }
 
-// add and edit clothing images
+// ============================================================
+// 4. ADD AND EDIT CLOTHING PAGES
+// ============================================================
 
 function cameraPage() {
   const preview = cameraStream
@@ -283,7 +326,9 @@ function confirmationPage() {
   `);
 }
 
-//sign in screens
+// ============================================================
+// 5. SIGN-IN SCREENS (UI DEMO — NO REAL ACCOUNTS YET)
+// ============================================================
 
 function signInPage() {
   return pageLayout(`
